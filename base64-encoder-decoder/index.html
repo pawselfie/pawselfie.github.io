@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="container">
+    <h1 style="color: #e0e0e0;">Base64</h1>
+    <div class="mode-switch">
+        <h1 id="tabEncoder" class="active">ENCODER</h1>
+        <span class="divider">/</span>
+        <h1 id="tabDecoder">DECODER</h1>
+    </div>
+
+    <div id="encoderSection">
+        <div class="drop-zone" id="dropZone">
+            <p style="margin-bottom: 5px;">Drag and drop a file here to Encode</p>
+            <p style="color: #4e4e4e; margin-top: 0; font-size: 0.9em;">(you can also paste the file)</p>
+            <span id="fileName"></span>
+            <span id="fileSize" style="color: #555; font-size: 0.8em; margin-left: 10px;"></span>
+        </div>
+        <input type="file" id="fileInput">
+    </div>
+
+    <textarea id="output" placeholder="Base64 output will be here, or paste your base64 in here and it'll automatically Decode it."></textarea>
+    
+    <div id="previewContainer" class="hidden">
+        <p id="previewLabel" style="color: #888; margin-bottom: 10px;">Likely: <strong style="color:white"> Unknown</strong></p>
+        <div id="mediaViewer"> </div>
+    </div>
+    <div class="btn-group">
+        <button id="copyBtn">Copy to Clipboard</button>
+        <button id="clearBtn">Clear</button>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
