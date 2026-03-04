@@ -38,28 +38,8 @@
     <div id="app" data-status="inactive">
         <div class="canvasContainer"></div>
         <div class="beePanel">
-            <div id="multSeltCon"></div>
-            <div id="general">
-                <div class="beeHead">
-                    <p class="beeTitle">General</p>
-                    <button id="generalMax" class="minMax" data-status="inactive">
-                        <span class="material-symbols-outlined">
-                        add
-                        </span>
-                    </button>
-                    <button id="generalMin" class="minMax" data-status="active">
-                        <span class="material-symbols-outlined">
-                        remove
-                        </span>
-                    </button>
-                </div>
-                <div id="bees-general" class="bee-section" data-status="active">
-                    <button id="btn-U">Empty slot</button>
-                    <button id="btn-LVL">Set Level</button>
-                    <button id="btn-FLIP">Flip Gifted Value</button>
-                    <button id="removeBeequip">Remove Beequip</button>
-                </div>
-            </div>
+            <!-- Column 1: Bees -->
+            <div class="bee-col">
             <div id="commonBees">
                 <div class="beeHead">
                     <p class="beeTitle">Common Bees</p>
@@ -208,31 +188,9 @@
                     <button id="btn-DIG">Digital Bee</button>
                 </div>
             </div>
-            <div id="mutations">
-                <div class="beeHead">
-                    <p class="beeTitle">Mutations</p>
-                    <button id="mutationMax" class="minMax" data-status="inactive">
-                        <span class="material-symbols-outlined">
-                        add
-                        </span>
-                    </button>
-                    <button id="mutationMin" class="minMax" data-status="active">
-                        <span class="material-symbols-outlined">
-                        remove
-                        </span>
-                    </button>
-                </div>
-                <div id="bees-mutation" class="bee-section" data-status="active">
-                    <button id="btn-AT">Attack</button>
-                    <button id="btn-CAM">Convert Amount</button>
-                    <button id="btn-GA">Gather Amount</button>
-                    <button id="btn-EN">Energy</button>
-                    <button id="btn-BAR">Bee Ability Rate</button>
-                    <button id="btn-CC">Critical Chance</button>
-                    <button id="btn-BMS">Movement Speed</button>
-                    <button id="btn-IC">Instant Conversion</button>
-                </div>
             </div>
+            <!-- Column 2: Beequips -->
+            <div class="bee-col">
             <div id="beequips">
                 <div class="beeHead">
                     <p class="beeTitle">Beequips - Normal</p>
@@ -337,7 +295,57 @@
                     <button id="btn-MFP">Monster Finger Puppet</button>
                 </div>
             </div>
-            <br>
+            </div>
+            <!-- Column 3: General + Mutations -->
+            <div class="bee-col">
+            <div id="multSeltCon"></div>
+            <div id="general">
+                <div class="beeHead">
+                    <p class="beeTitle">General</p>
+                    <button id="generalMax" class="minMax" data-status="inactive">
+                        <span class="material-symbols-outlined">
+                        add
+                        </span>
+                    </button>
+                    <button id="generalMin" class="minMax" data-status="active">
+                        <span class="material-symbols-outlined">
+                        remove
+                        </span>
+                    </button>
+                </div>
+                <div id="bees-general" class="bee-section" data-status="active">
+                    <button id="btn-U">Empty slot</button>
+                    <button id="btn-LVL">Set Level</button>
+                    <button id="btn-FLIP">Flip Gifted Value</button>
+                    <button id="removeBeequip">Remove Beequip</button>
+                </div>
+            </div>
+            <div id="mutations">
+                <div class="beeHead">
+                    <p class="beeTitle">Mutations</p>
+                    <button id="mutationMax" class="minMax" data-status="inactive">
+                        <span class="material-symbols-outlined">
+                        add
+                        </span>
+                    </button>
+                    <button id="mutationMin" class="minMax" data-status="active">
+                        <span class="material-symbols-outlined">
+                        remove
+                        </span>
+                    </button>
+                </div>
+                <div id="bees-mutation" class="bee-section" data-status="active">
+                    <button id="btn-AT">Attack</button>
+                    <button id="btn-CAM">Convert Amount</button>
+                    <button id="btn-GA">Gather Amount</button>
+                    <button id="btn-EN">Energy</button>
+                    <button id="btn-BAR">Bee Ability Rate</button>
+                    <button id="btn-CC">Critical Chance</button>
+                    <button id="btn-BMS">Movement Speed</button>
+                    <button id="btn-IC">Instant Conversion</button>
+                </div>
+            </div>
+            </div>
         </div>
         <div class="toolPanel">
             <div class="left">

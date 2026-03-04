@@ -188,14 +188,36 @@ function setup() {
 
         if (['bees-common', 'bees-rare', 'bees-epic', 'bees-legend', 'bees-mythic', 'bees-event'].includes(parentId)) {
             bee_btns.push(wrappedBtn);
-        } 
+        }
         else if (['bees-beequip', 'bees-beesmas', 'bees-unreleased'].includes(parentId)) {
             bqp_btns.push(wrappedBtn);
-        } 
+        }
         else if (parentId === 'bees-mutation') {
             mut_btns.push(wrappedBtn);
         }
     });
+
+    for (const wrappedBtn of bee_btns) {
+        const btn = wrappedBtn.elt;
+        const code = btn.id.slice(4);
+        const img = document.createElement('img');
+        img.src = `assets/bees/bee_${code}.png`;
+        img.alt = '';
+        img.draggable = false;
+        img.onerror = () => img.style.display = 'none';
+        btn.prepend(img);
+    }
+
+    for (const wrappedBtn of bqp_btns) {
+        const btn = wrappedBtn.elt;
+        const code = btn.id.slice(4);
+        const img = document.createElement('img');
+        img.src = `assets/bqps/bqp_${code}.png`;
+        img.alt = '';
+        img.draggable = false;
+        img.onerror = () => img.style.display = 'none';
+        btn.prepend(img);
+    }
 
     if (urlParams.has('hive')) {
         let hiveParams = urlParams.get('hive');
@@ -640,7 +662,7 @@ function changeSlot(type, category) {
 }
 
 function checkWindowSize() {
-    if (window.innerWidth < 850 || window.innerHeight < 660) {
+    if (window.innerWidth < 1050 || window.innerHeight < 660) {
         sizeOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     } else {
