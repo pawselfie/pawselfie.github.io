@@ -1,4 +1,4 @@
-let lightModeBtn, darkModeBtn, mode, cnv, fnt, theme, hive, hiveSaved, hexes, hexesNormal, selected, multSelt, gifted, bee_btns, bqp_btns, mut_btns, dragging=false;
+let mode, cnv, fnt, hive, hiveSaved, hexes, hexesNormal, selected, multSelt, gifted, bee_btns, bqp_btns, mut_btns, dragging=false;
 const bee_imgs = {};
 const bqp_imgs = {};
 const queryString = window.location.search;
@@ -158,13 +158,8 @@ function preload() {
 function setup() {
     cnv = createCanvas(957, 506);
     frameRate(30);
-    lightModeBtn = select('#lightMode');
-    darkModeBtn = select('#darkMode');
     setMode('menu');
     textFont(fnt);
-
-    theme = getItem('theme') ?? 'light';
-    setTheme(theme);
     
     hive = {
         name: 'hive',
@@ -308,9 +303,6 @@ function setup() {
 
 function draw() {
     background(select('body').style('color'));
-    lightModeBtn.mouseClicked(setTheme.bind(null, 'light'));
-    darkModeBtn.mouseClicked(setTheme.bind(null, 'dark'));
-
     // menu
     if (mode == 'menu') {
         textAlign(CENTER);
@@ -438,20 +430,6 @@ function newHive() {
     setMode('app');
 }
 
-function setTheme(t) {
-    if (t == 'light') {
-        lightModeBtn.attribute('data-status', 'inactive')
-        darkModeBtn.attribute('data-status', 'active');
-        select('body').removeClass('dark-mode');
-    } else {
-        lightModeBtn.attribute('data-status', 'active')
-        darkModeBtn.attribute('data-status', 'inactive');
-        select('body').addClass('dark-mode');
-    }
-
-    theme = t;
-    storeItem('theme', t);
-}
 
 function setMode(m, loaded=false) {
     if (m == 'menu') {

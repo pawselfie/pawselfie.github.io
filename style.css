@@ -1,55 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
 
 :root {
-    --bg-light: #e6e6e6;
-    --text-light: #313131;
-    --header-light: #e0e0e0;
-    --header-dark: #1f1f1f;
+    --bg: #0C1626;
+    --bg-dark: #050722;
+    --secondary: #151f30;
+    --accent: #287882;
+    --text: #C3E6EB;
 }
 
 html {
-    background: black;
+    background: #050722;
     height: 100vh;
 }
 
 body {
-    background: var(--bg-light);
-    color: var(--text-light);
+    background: linear-gradient(135deg, #0C1626, #050722);
+    color: var(--text);
     max-width: 1300px;
     max-height: 95%;
     margin: auto;
     font-family: 'Roboto Slab', serif;
-    transition: background 0.5s, color 0.5s;
     overflow: hidden;
-}
-
-.dark-mode {
-    background: var(--text-light);
-    color: var(--bg-light);
-}
-
-#darkToggle > button {
-    position: absolute;
-    transition: display 0.1s;
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translate(0, -50%);
 }
 
 header {
     display: flex;
-    background: var(--header-light);
+    background: var(--secondary);
     color: inherit;
     justify-content: center;
     align-items: center;
     position: relative;
     font-size: 1.5vw;
-}
-
-.dark-mode header {
-    background: var(--header-dark);
-    transition: background 0.1s;
 }
 
 #app, #menu {
@@ -62,7 +43,7 @@ header {
 }
 
 #menu {
-    grid-template-areas: 
+    grid-template-areas:
         'canvas canvas canvas canvas'
         'canvas canvas canvas canvas'
         'canvas canvas canvas canvas'
@@ -82,14 +63,6 @@ header {
 
 [data-status~='inactive'] {
     display: none !important;
-}
-
-#lightMode {
-    background: var(--text-light);
-}
-
-.button_light {
-    color: var(--bg-light);
 }
 
 .beePanel {
@@ -122,10 +95,7 @@ header {
 
 canvas {
     position: relative;
-    /*top: 57px; */
-    /* transform: translateX(-50%); */
     border-radius: 7.5px;
-    /* min-width: 0px; */
 }
 
 .toolPanel button {
@@ -142,6 +112,8 @@ canvas {
 
 button {
     font-family: 'Roboto Slab', serif;
+    background: var(--secondary);
+    color: var(--text);
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -149,21 +121,10 @@ button {
     user-select: none;
 }
 
-.dark-mode #lightMode {
-    background: var(--text-light);
-    color: var(--bg-light);
-    transition: background 0.1s, color 0.1s;
-}
-
 #appButton-1, #appButton-2, #appButton-3 {
     width: 10rem;
     height: 5rem;
     font-size: 1rem;
-}
-
-.dark-mode button {
-    background: var(--text-light);
-    color: var(--bg-light);
 }
 
 #hivemind_icon {
