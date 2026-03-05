@@ -1,3 +1,9 @@
+const _origGetContext = HTMLCanvasElement.prototype.getContext;
+HTMLCanvasElement.prototype.getContext = function(type, attrs) {
+    if (type === '2d') attrs = { ...attrs, willReadFrequently: true };
+    return _origGetContext.call(this, type, attrs);
+};
+
 let mode, cnv, fnt, hive, hiveSaved, hexes, hexesNormal, selected, multSelt, gifted, bee_btns, bqp_btns, mut_btns, dragging=false;
 const bee_imgs = {};
 const bqp_imgs = {};
