@@ -13,6 +13,7 @@ Plan your hive layout visually, assign bees, set levels, apply mutations, equip 
 - **Better Style** — A more consistent style made out of a shade of dark blue
 - **Replaced Dialogs** — Dialogs are now their own GUI, and aren't dependant on the browser
 - **Keybinds** — You can do quick actions via Keybinds instead of having to use your mouse
+- **Share your Hive** — Send a 1-Click URL of your hive so others can edit it
 - **More Utility Buttons:**
   - Select All Slots
   - Remove Mutation

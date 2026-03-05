@@ -704,7 +704,7 @@ function showModal({ message, type = 'alert', defaultValue = '' }) {
         cancelBtn.addEventListener('click', onCancel);
         document.addEventListener('keydown', onKeydown);
 
-        if (type === 'prompt') setTimeout(() => inputEl.focus(), 50);
+        if (type === 'prompt') setTimeout(() => { inputEl.focus(); inputEl.select(); }, 50);
     });
 }
 
