@@ -11,6 +11,7 @@ Plan your hive layout visually, assign bees, set levels, apply mutations, equip 
 - **Bee and Beequip Images** — Brings an image to each Bee and Beequip selection to ease search
 - **Unreleased Beequips** — Has all 12 Unreleased Beequips found in Onett's inventory
 - **Better Style** — A more consistent style made out of a shade of dark blue
+- **Replaced Dialogs** — Dialogs are now their own GUI, and aren't dependant on the browser
 - **More Utility Buttons:**
 
   - Select All Slots
