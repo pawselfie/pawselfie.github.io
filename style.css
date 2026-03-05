@@ -129,7 +129,7 @@ button {
     font-family: 'Roboto Slab', serif;
     background: var(--secondary);
     color: var(--text);
-    border-radius: 999px;
+    border-radius: 6px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
