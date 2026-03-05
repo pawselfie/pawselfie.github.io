@@ -23,6 +23,71 @@ body {
     overflow: hidden;
 }
 
+@media (max-width: 900px) {
+    html {
+        height: auto;
+    }
+
+    body {
+        max-height: none;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #app, #menu {
+        height: auto;
+    }
+
+    #app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            'canvas'
+            'beePanel'
+            'toolPanel';
+    }
+
+    #menu {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            'canvas'
+            'toolPanel';
+    }
+
+    .beePanel {
+        max-height: 42vh;
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-direction: row;
+    }
+
+    .bee-col {
+        min-width: 150px;
+        max-height: 42vh;
+    }
+
+    .toolPanel {
+        height: auto;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px 4px;
+    }
+
+    #app .toolPanel {
+        max-height: none;
+    }
+
+    .left, .right {
+        margin: 0;
+    }
+
+    .toolPanel button {
+        height: auto;
+        padding: 6px 10px;
+    }
+}
+
 header {
     display: flex;
     background: var(--secondary);
