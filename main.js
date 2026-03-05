@@ -307,7 +307,7 @@ function draw() {
     if (mode == 'menu') {
         textAlign(CENTER);
         textSize(50);
-        fill(select('body').style('background-color'));
+        fill(select('body').style('color'));
         let textY = height / 2 + map(sin(frameCount * 0.025), -1, 1, -20, 20);
         noStroke();
         text('Deepsea Hive Builder', width/2, textY);
