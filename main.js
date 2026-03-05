@@ -295,6 +295,7 @@ function setup() {
     select('#btn-LVL').mouseClicked(changeSlot.bind(null, 0, 'level'));
     select('#btn-FLIP').mouseClicked(changeSlot.bind(null, 0, 'flip'));
     select('#removeBeequip').mouseClicked(changeSlot.bind(null, 0, 'removequip'));
+    select('#removeMutation').mouseClicked(changeSlot.bind(null, null, 'removemut'));
 
     gifted = createCheckbox('gifted (alt)', true)
         .id('giftedSelect')
@@ -633,6 +634,8 @@ function changeSlot(type, category) {
             hive.slots[i] = (cur === cur.toUpperCase()) ? cur.toLowerCase() : cur.toUpperCase();
         } else if (category === 'removequip') {
             hive.beequip[i] = null;
+        } else if (category === 'removemut') {
+            hive.mutation[i] = null;
         }
     }
     selected = [];
