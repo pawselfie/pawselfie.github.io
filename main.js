@@ -1,8 +1,51 @@
-let mode, cnv, fnt, hive, hiveSaved, hexes, hexesNormal, selected, multSelt, gifted, bee_btns, bqp_btns, mut_btns, dragging=false, canvasScale=1;
+let mode, cnv, fnt, hive, hiveSaved, hexes, hexesNormal, selected, multSelt, gifted, bee_btns, bqp_btns, mut_btns, dragging=false;
 const bee_imgs = {};
 const bqp_imgs = {};
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+
+const sizeOverlay = document.createElement('div');
+sizeOverlay.style.position = 'fixed';
+sizeOverlay.style.top = 0;
+sizeOverlay.style.left = 0;
+sizeOverlay.style.width = '100%';
+sizeOverlay.style.height = '100%';
+sizeOverlay.style.backgroundColor = 'rgba(0,0,0,0.8)';
+sizeOverlay.style.color = '#fff';
+sizeOverlay.style.display = 'flex';
+sizeOverlay.style.alignItems = 'center';
+sizeOverlay.style.justifyContent = 'center';
+sizeOverlay.style.fontSize = '24px';
+sizeOverlay.style.zIndex = 9999;
+sizeOverlay.style.textAlign = 'center';
+sizeOverlay.style.padding = '20px';
+sizeOverlay.innerText = 'Please make your window bigger.\nGoing smaller might break the website visually.';
+document.body.appendChild(sizeOverlay);
+
+function isMobile() {
+    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+if (isMobile()) {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.85)';
+    overlay.style.color = '#fff';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.fontSize = '24px';
+    overlay.style.textAlign = 'center';
+    overlay.style.padding = '20px';
+    overlay.style.zIndex = 9999;
+    overlay.innerText = "Deepsea Hive Builder is not available on mobile devices.";
+    document.body.appendChild(overlay);
+    throw new Error('Mobile no more');
+}
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
@@ -323,7 +366,7 @@ function draw() {
     
     if (mode == 'app' && dragging) {
         for (const [i, v] of hexes.entries()) {
-            if (dist(mouseX / canvasScale, mouseY / canvasScale, v.x, v.y) <= 25) {
+            if (dist(mouseX, mouseY, v.x, v.y) <= 25) {
                 if (!selected.includes(i)) {
                     selected.push(i);
                 }
@@ -334,12 +377,10 @@ function draw() {
 
 function mouseClicked() {
     if (mode == 'app') {
-        const mx = mouseX / canvasScale;
-        const my = mouseY / canvasScale;
-        if (mx.between(0, 472, true) && my.between(0, 563)) {
+        if (mouseX.between(0, 472, true) && mouseY.between(0, 563)) {
             let onSlot = false;
             for (const [i, v] of hexes.entries()) {
-                if (dist(mx, my, v.x, v.y) <= 25) {
+                if (dist(mouseX, mouseY, v.x, v.y) <= 25) {
                     if (!keyIsDown(SHIFT) && !multSelt.checked()) {
                         hexes = hexesNormal.splice();
                         selected = [];
@@ -411,7 +452,6 @@ async function setMode(m, loaded=false) {
         cnv.style('transform', 'translateX(-50%)');
         select('#menu').attribute('data-status', 'active');
         select('#app').attribute('data-status', 'inactive');
-        scaleCanvas();
     } else {
         if (!loaded) {
             let x = await showModal({ message: 'Enter hive name (max 15 chars): (this can be changed later)', type: 'prompt', defaultValue: 'hive' });
@@ -437,7 +477,6 @@ async function setMode(m, loaded=false) {
         resizeCanvas(472, 563);
         select('#menu').attribute('data-status', 'inactive');
         select('#app').attribute('data-status', 'active');
-        scaleCanvas();
     }
 }
 
@@ -615,64 +654,18 @@ async function clearHive() {
     hexes = hexesNormal.splice();
 }
 
-function scaleCanvas() {
-    if (!cnv) return;
-    const isMenu = mode === 'menu';
-    const naturalW = isMenu ? 957 : 472;
-    const naturalH = isMenu ? 506 : 563;
-    const scale = Math.min(1, window.innerWidth / naturalW);
-    canvasScale = scale;
-    cnv.elt.style.transform = `scale(${scale})`;
-    cnv.elt.style.transformOrigin = 'top left';
-    const container = cnv.elt.parentElement;
-    if (container) container.style.height = (naturalH * scale) + 'px';
-}
-
-function touchStarted() {
-    if (mode == 'app' && touches.length > 0) {
-        const tx = touches[0].x / canvasScale;
-        const ty = touches[0].y / canvasScale;
-        if (tx.between(0, 472, true) && ty.between(0, 563)) {
-            let onSlot = false;
-            for (const [i, v] of hexes.entries()) {
-                if (dist(tx, ty, v.x, v.y) <= 25) {
-                    if (!multSelt.checked()) {
-                        hexes = hexesNormal.splice();
-                        selected = [];
-                    }
-                    onSlot = true;
-                    selected.push(i);
-                }
-            }
-            if (!onSlot) {
-                selected = [];
-                hexes = hexesNormal.splice();
-            }
-        }
-        if (touches.length >= 2) dragging = true;
+function checkWindowSize() {
+    if (window.innerWidth < 1050 || window.innerHeight < 660) {
+        sizeOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    } else {
+        sizeOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
-    return false;
 }
 
-function touchMoved() {
-    if (mode === 'app' && dragging && touches.length > 0) {
-        const tx = touches[0].x / canvasScale;
-        const ty = touches[0].y / canvasScale;
-        for (const [i, v] of hexes.entries()) {
-            if (dist(tx, ty, v.x, v.y) <= 25 && !selected.includes(i)) {
-                selected.push(i);
-            }
-        }
-    }
-    return false;
-}
-
-function touchEnded() {
-    if (mode === 'app') dragging = false;
-    return false;
-}
-
-window.addEventListener('resize', scaleCanvas);
+window.addEventListener('load', checkWindowSize);
+window.addEventListener('resize', checkWindowSize);
 
 function showModal({ message, type = 'alert', defaultValue = '' }) {
     return new Promise(resolve => {
