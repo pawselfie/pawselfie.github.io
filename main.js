@@ -6,6 +6,7 @@ HTMLCanvasElement.prototype.getContext = function(type, attrs) {
 
 let mode, cnv, fnt, hive, hiveSaved, hexes, hexesNormal, selected, multSelt, gifted, bee_btns, bqp_btns, mut_btns, dragging=false;
 let undoStack = [];
+let redoStack = [];
 let slotClipboard = null;
 let hideLevels = false;
 let _pendingHiveFromURL = null;
@@ -892,14 +893,25 @@ function selectAllSlots() {
 function saveUndoState() {
     undoStack.push(JSON.parse(JSON.stringify(hive)));
     if (undoStack.length > 20) undoStack.shift();
+    redoStack = [];
 }
 
 function undo() {
     if (undoStack.length === 0) return;
+    redoStack.push(JSON.parse(JSON.stringify(hive)));
     hive = undoStack.pop();
     selected = [];
     hexes = [];
 }
+
+function redo() {
+    if (redoStack.length === 0) return;
+    undoStack.push(JSON.parse(JSON.stringify(hive)));
+    hive = redoStack.pop();
+    selected = [];
+    hexes = [];
+}
+
 
 function copySelection() {
     if (selected.length === 0) return;
@@ -1187,6 +1199,7 @@ function keyPressed() {
     }
     if (!keyIsDown(CONTROL)) return;
     const k = key.toLowerCase();
+    if (k === 'z' && keyIsDown(SHIFT)) { redo(); return false; }
     if (k === 'z') { undo(); return false; }
     if (k === 'a') { selectAllSlots(); return false; }
     if (k === 'c') { copySelection(); return false; }
