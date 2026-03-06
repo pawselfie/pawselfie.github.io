@@ -18,6 +18,32 @@ Plan your hive layout visually, assign bees, set levels, apply mutations, equip 
   - Select All Slots
   - Remove Mutation
   - Clear Hive
+- **Presets** — Load curated hive builds from the menu across Blue, Red, White, RBC, and Alts tabs; save and manage your own builds in the Custom tab
+
+---
+
+## Presets
+
+The menu includes a preset panel with curated hive builds organized into tabs:
+
+| Tab | Contents |
+|-----|----------|
+| **Blue** | Blue Hive, Blessing Boost Comp, Diamond Comp, Honeyday Comp, Pop Gummy Comp |
+| **Red** | Red Hive, Bloom Comp, Scorch Gummy Comp |
+| **White** | White Hive |
+| **RBC** | RBC Hive, RBC Blue Hive |
+| **Alts** | Fuzzy, Tad, Buoyant, Blue-Guide, Guide, Attack, Mondo Attack, Guide-Fuzzy, Guide-Buo, Tri-Hybrid, Tetra-Hybrid Alts |
+| **Custom** | Your saved builds — see below |
+
+### Custom Presets
+
+The **Custom** tab lets you save and manage your own hive builds, stored locally in your browser.
+
+- Click **+ Save current** to save the hive you're currently editing — you'll be prompted to give it a name
+- Click a saved preset to load it
+- Click the **×** next to a preset to delete it
+
+Custom presets persist across sessions via `localStorage`.
 
 ---
 
