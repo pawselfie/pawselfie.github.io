@@ -8,6 +8,30 @@ let mode, cnv, fnt, hive, hiveSaved, hexes, hexesNormal, selected, multSelt, gif
 let undoStack = [];
 let slotClipboard = null;
 let hideLevels = false;
+let _pendingHiveFromURL = null;
+
+(async () => {
+    const param = new URLSearchParams(location.search).get('hive');
+    if (!param) return;
+    try {
+        let json;
+        if (param.startsWith('z')) {
+            const b64 = param.slice(1).replace(/-/g, '+').replace(/_/g, '/');
+            const binary = atob(b64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            const stream = new DecompressionStream('deflate-raw');
+            const writer = stream.writable.getWriter();
+            writer.write(bytes);
+            writer.close();
+            const buf = await new Response(stream.readable).arrayBuffer();
+            json = new TextDecoder().decode(buf);
+        } else {
+            json = param; // legacy: old param is plain JSON
+        }
+        _pendingHiveFromURL = JSON.parse(json);
+    } catch(e) { console.error('Failed to parse hive URL param:', e); }
+})();
 
 // ── PRESETS ──────────────────────────────────────────────────────────────────
 // Set `data` to the string produced by "Export as string" for each preset.
@@ -28,7 +52,7 @@ const PRESETS = {
         { name: 'Scorch Gummy Comp',  data: '{"name":"Scorch Gummy Comp","slots":["be","gu","cr","ph","tab","br","ra","dig","st","ha","ri","ho","ba","com","sh","bab","li","shy","mu","bab","ta","sp","ca","sp","ta","sp","pr","sp","pr","sp","pr","pr","pr","pr","pr","pr","pr","pr","pr","pr","ve","ve","ve","ve","ve","ve","ve","ve","ve","ve"],"level":[22,22,22,22,22,22,22,23,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22],"mutation":["BAR","BMS","BMS","BMS","BAR","BMS","BMS","GA","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BAR","BMS","BAR","BMS","BAR","BMS","BAR","BMS","BAR","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS"],"beequip":[null,null,"TO","PAP",null,"TOY","PA","SW","CAMP","PA","TOY","SM","PI","WH","KA",null,"TO","PAP",null,null,"PO",null,"SM",null,"PO",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}' },
     ],
     rbc: [
-        { name: 'RBC Hive',           data: '' },
+        { name: 'RBC Hive',           data: '{"name":"RBC Hive","slots":["ri","com","ha","mu","ca","buc","ta","st","ta","li","ta","sp","ta","sp","ta","sp","sp","buo","sp","sp","ve","be","ba","tab","ve","ve","ve","dig","ve","ve","ve","ve","ve","ve","ve","ve","ve","pr","ve","ve","pr","pr","pr","pr","pr","pr","pr","pr","pr","pr"],"level":[20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20],"mutation":["BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BAR","BMS","BAR","BMS","BAR","BAR","BMS","BAR","BAR","BMS","BAR","BMS","BAR","BMS","BMS","BMS","GA","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS","BMS"],"beequip":["TOY","WH","PA",null,"CH","TOY","PO","PA","PO","TO",null,"SM",null,"SM",null,null,null,"KA",null,null,null,null,"PI",null,null,null,null,"SW",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}' },
         { name: 'RBC Blue Hive',      data: '' },
     ],
     alts: [
@@ -248,27 +272,13 @@ function setup() {
         btn.prepend(img);
     }
 
-    if (urlParams.has('hive')) {
-        let hiveParams = urlParams.get('hive');
-        try {
-            hive = JSON.parse(hiveParams);
-
-            hive.slots = hive.slots || [];
-            hive.level = hive.level || new Array(hive.slots.length).fill(0);
-            hive.mutation = hive.mutation || new Array(hive.slots.length).fill(null);
-            hive.beequip = hive.beequip || new Array(hive.slots.length).fill(null);
-
-            setMode('app', true);
-        } catch (e) {
-            console.error('Failed to parse hive:', e);
-            hive = {
-                name: 'hive',
-                slots: [],
-                level: [],
-                mutation: [],
-                beequip: []
-            };
-        }
+    if (_pendingHiveFromURL) {
+        hive = _pendingHiveFromURL;
+        hive.slots    = hive.slots    || [];
+        hive.level    = hive.level    || new Array(hive.slots.length).fill(0);
+        hive.mutation = hive.mutation || new Array(hive.slots.length).fill(null);
+        hive.beequip  = hive.beequip  || new Array(hive.slots.length).fill(null);
+        setMode('app', true);
     }
 
     // buttons
@@ -383,10 +393,6 @@ function draw() {
             select('#changeName').attribute('disabled', '');
         } else {
             select('#changeName').removeAttribute('disabled');
-        }
-
-        for (const i of selected) {
-            hexes[i].type = 'SELECTED';
         }
 
         for (const i of bee_btns) {
@@ -551,16 +557,34 @@ async function changeName() {
     hive.name = x.substring(0, 15);
 }
 
-function saveHive() {
-    storeItem('hive', hive);
-    hiveSaved = true;
-    const txt = select('#savedText')
+function flashStatusText(msg) {
+    const txt = select('#savedText');
+    txt.elt.textContent = msg;
     txt.style('opacity', '1');
     txt.style('animation', '1s linear 0s save-fadeout');
     txt.elt.addEventListener('animationend', () => {
         txt.style('opacity', '0');
         txt.style('animation', null);
-    });
+        txt.elt.textContent = 'saved!';
+    }, { once: true });
+}
+
+function saveHive() {
+    storeItem('hive', hive);
+    hiveSaved = true;
+    const customs = getCustomPresets();
+    const match = customs.findIndex(p => p.name === hive.name);
+    if (match !== -1) {
+        customs[match] = {
+            name:     hive.name,
+            slots:    hive.slots.slice(),
+            level:    hive.level.slice(),
+            mutation: hive.mutation.slice(),
+            beequip:  hive.beequip.slice(),
+        };
+        saveCustomPresets(customs);
+    }
+    flashStatusText('saved!');
 }
 
 function exportImage() {
@@ -615,7 +639,7 @@ function exportText() {
     };
     const jsonStr = JSON.stringify(hiveData);
     navigator.clipboard.writeText(jsonStr).then(() => {
-        showModal({ message: 'Copied to clipboard!', type: 'alert' });
+        flashStatusText('copied!');
     });
 }
 
@@ -845,11 +869,17 @@ function initPresetPanel() {
         if (group === 'custom') {
             const saveBtn = document.createElement('button');
             saveBtn.className = 'preset-btn preset-save-btn';
-            saveBtn.textContent = '+ Save current';
+            saveBtn.textContent = '+ Create Preset';
             saveBtn.addEventListener('click', async () => {
-                const name = await showModal({ message: 'Name this preset:', type: 'prompt', defaultValue: hive.name || 'My Preset' });
+                let name = await showModal({ message: 'Name this preset:', type: 'prompt', defaultValue: hive.name || 'My Preset' });
                 if (!name) return;
                 const customs = getCustomPresets();
+                const taken = new Set(customs.map(p => p.name));
+                if (taken.has(name)) {
+                    let n = 2;
+                    while (taken.has(`${name} ${n}`)) n++;
+                    name = `${name} ${n}`;
+                }
                 customs.push({
                     name,
                     slots:    hive.slots.slice(),
@@ -869,7 +899,10 @@ function initPresetPanel() {
                 const btn = document.createElement('button');
                 btn.className = 'preset-btn';
                 btn.textContent = preset.name;
-                btn.addEventListener('click', () => loadPreset(preset));
+                btn.addEventListener('click', () => {
+                    const fresh = getCustomPresets().find(p => p.name === preset.name);
+                    if (fresh) loadPreset(fresh);
+                });
 
                 const del = document.createElement('button');
                 del.className = 'custom-preset-del';
@@ -924,9 +957,18 @@ function loadPreset(preset) {
 }
 
 async function shareURL() {
-    const url = `${location.origin}${location.pathname}?hive=${encodeURIComponent(JSON.stringify(hive))}`;
+    const bytes = new TextEncoder().encode(JSON.stringify(hive));
+    const stream = new CompressionStream('deflate-raw');
+    const writer = stream.writable.getWriter();
+    writer.write(bytes);
+    writer.close();
+    const buf = await new Response(stream.readable).arrayBuffer();
+    let binary = '';
+    for (const b of new Uint8Array(buf)) binary += String.fromCharCode(b);
+    const b64url = 'z' + btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const url = `${location.origin}${location.pathname}?hive=${b64url}`;
     await navigator.clipboard.writeText(url);
-    showModal({ message: 'Share URL copied to clipboard!', type: 'alert' });
+    flashStatusText('copied!');
 }
 
 function keyPressed() {

@@ -40,7 +40,7 @@ The menu includes a preset panel with curated hive builds organized into tabs:
 
 The **Custom** tab lets you save and manage your own hive builds, stored locally in your browser.
 
-- Click **+ Save current** to save the hive you're currently editing — you'll be prompted to give it a name
+- Click **+ Create Preset** to save the hive you're currently editing — you'll be prompted to give it a name
 - Click a saved preset to load it
 - Click the **×** next to a preset to delete it
 

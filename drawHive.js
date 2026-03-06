@@ -1,4 +1,5 @@
 function drawHive(x, y, radius, slots, level, mutation, beequip) {
+    hexes = [];
     const mutations = {
         NONE: color(255, 254, 254),
         AT: color(234, 59, 54),
@@ -99,14 +100,14 @@ function drawHive(x, y, radius, slots, level, mutation, beequip) {
         hexes.push({x: x + xOffset, y: y + yOffset, bee: bee, type: rarity});
         // DRAWING EMPTY OR SELECTED ICON
         if (slots[i] == 'U') {
-            if (hexes[i].type != 'SELECTED') {
+            if (!selected.includes(i)) {
                 fill(rarities.U);
             } else {
                 fill(rarities.SELECTED);
             }
             stroke('#0C1626');
             hexagon(x + xOffset, y + yOffset, radius - 2);
-        } else if (hexes[i].type == 'SELECTED') {
+        } else if (selected.includes(i)) {
             fill(rarities.SELECTED);
         } else {
             fill(fillColour);
@@ -179,13 +180,7 @@ function drawHive(x, y, radius, slots, level, mutation, beequip) {
         }
         
 
-        let isNormal = true;
-        for (const k of hexes) {
-            if (k.type == 'SELECTED') {
-                isNormal = false;
-            }
-        }
-        if (isNormal) {
+        if (selected.length === 0) {
             hexesNormal = hexes.map(h => ({...h}));
         }
 
@@ -225,13 +220,7 @@ function drawHive(x, y, radius, slots, level, mutation, beequip) {
             hexes.push({x: x + xOffset, y: y + yOffset, bee: 'U', type: 'U'});
         }
         hexes.pop();
-        let isNormal = true;
-        for (const k of hexes) {
-            if (k.type == 'SELECTED') {
-                isNormal = false;
-            }
-        }
-        if (isNormal) {
+        if (selected.length === 0) {
             hexesNormal = hexes.map(h => ({...h}));
         }
     }

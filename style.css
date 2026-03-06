@@ -68,9 +68,8 @@ header {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 5px 8px;
-    background: var(--secondary);
-    border-radius: 6px;
+    margin-top: -20px;
+    padding: 4px 15px 10px;
 }
 
 #preset-tabs {
@@ -93,7 +92,7 @@ header {
     border-radius: 4px;
     border: 1px solid transparent;
     cursor: pointer;
-    height: auto;
+    height: 1.5rem;
 }
 
 .preset-tab.active {
@@ -125,7 +124,7 @@ header {
     border-radius: 4px;
     cursor: pointer;
     white-space: nowrap;
-    height: auto;
+    height: 1.5rem;
 }
 
 .custom-preset-entry {
@@ -246,6 +245,8 @@ button {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    min-width: 60px;
+    display: inline-block !important;
 }
 
 .left {
@@ -258,6 +259,10 @@ button {
     margin-left: auto;
 }
 
+.beeTitle {
+    margin: 10px 0 4px;
+}
+
 .beeHead {
     position: relative;
 }
@@ -267,7 +272,8 @@ button {
     background: transparent !important;
     border: 0 !important;
     right: 10px;
-    transform: translateY(-132.5%);
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #giftedSelect {
